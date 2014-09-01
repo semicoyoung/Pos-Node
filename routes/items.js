@@ -2,7 +2,8 @@
 /*
  * GET users listing.
  */
+var fixtures = require('../models/fixtures');
 
 exports.list = function(req, res){
-    res.render('list', { list: [{type: '饮料', name: '雪碧', price: 3, unit: '瓶'}], title: '', cart: {count: 0}});
+    res.render('list', {title: '', list: fixtures.items(), cart: {count: 0}});
 };

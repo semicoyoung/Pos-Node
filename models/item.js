@@ -52,3 +52,5 @@ Item.prototype.fare = function () {
 Item.prototype.save = function () {
     return this.free() * this.price;
 };
+
+module.exports = Item;
