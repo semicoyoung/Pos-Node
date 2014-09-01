@@ -1,0 +1,52 @@
+<% include header.ejs %>
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <a class="navbar-brand" ng-click="go_home()">Let's Go</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a ng-click="go_home()">主页</a></li>
+                <li class="active"><a ng-click="go_to_list()">商品列表</a></li>
+
+            </ul>
+            <ul class="nav navbar-nav pull-right">
+                <li>
+                    <a ng-click="go_to_cart()">
+                        <span class="glyphicon glyphicon-shopping-cart"></span>购物车 (<span>{{cartCount}}</span>)
+                    </a>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container text-center">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>商品列表</h3>
+        </div>
+        <div class="panel-body">
+            <table id="item-table" class="table table-bordered">
+                <tr>
+                    <th>分类</th><th>名称</th><th>单价(元)</th><th>单位</th><th></th>
+                </tr>
+                <% for(var i=0; i<list.length; i++) {%>
+                <tr>
+                    <td>list[i].type</td>
+                    <td>list[i].name</td>
+                    <td>list[i].price</td>
+                    <td>list[i].unit</td>
+                    <td><button class="btn btn-primary btm-sm">加入购物车</button></td>
+                </tr>
+                <% } %>
+            </table>
+        </div>
+    </div>
+
+</div>
+<% include footer.ejs %>
