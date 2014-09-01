@@ -3,20 +3,20 @@
     <div class="container container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-            <a class="navbar-brand" ng-click="go_home()">Let's Go</a>
+            <a class="navbar-brand">Let's Go</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a ng-click="go_home()">主页</a></li>
-                <li class="active"><a ng-click="go_to_list()">商品列表</a></li>
+                <li><a>主页</a></li>
+                <li class="active"><a>商品列表</a></li>
 
             </ul>
             <ul class="nav navbar-nav pull-right">
                 <li>
-                    <a ng-click="go_to_cart()">
-                        <span class="glyphicon glyphicon-shopping-cart"></span>购物车 (<span>{{cartCount}}</span>)
+                    <a>
+                        <span class="glyphicon glyphicon-shopping-cart"></span>购物车 (<span><%= cart.count %></span>)
                     </a>
                 </li>
             </ul>
@@ -37,10 +37,10 @@
                 </tr>
                 <% for(var i=0; i<list.length; i++) {%>
                 <tr>
-                    <td>list[i].type</td>
-                    <td>list[i].name</td>
-                    <td>list[i].price</td>
-                    <td>list[i].unit</td>
+                    <td><%= list[i].type %></td>
+                    <td><%= list[i].name %></td>
+                    <td><%= list[i].price %></td>
+                    <td><%= list[i].unit %></td>
                     <td><button class="btn btn-primary btm-sm">加入购物车</button></td>
                 </tr>
                 <% } %>
