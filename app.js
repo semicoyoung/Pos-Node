@@ -5,7 +5,6 @@
 
 var express = require('express');
 var routes = require('./routes');
-var items = require('./routes/items');
 var http = require('http');
 var path = require('path');
 var MongoStore = require('connect-mongo')(express);
@@ -40,9 +39,12 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/list', items.list);
-app.get('/cart', items.cart);
-app.get('/payment', items.payment);
+
+app.get('/list', routes.list);
+
+app.get('/cart', routes.cart);
+
+app.get('/payment', routes.payment);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
