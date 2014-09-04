@@ -15,7 +15,7 @@
             </ul>
             <ul class="nav navbar-nav pull-right">
                 <li>
-                    <a>
+                    <a href="cart">
                         <span class="glyphicon glyphicon-shopping-cart"></span>购物车 (<span><%= cart.count %></span>)
                     </a>
                 </li>
@@ -36,13 +36,16 @@
                     <th>分类</th><th>名称</th><th>单价(元)</th><th>单位</th><th></th>
                 </tr>
                 <% for(var i=0; i<list.length; i++) {%>
-                <tr>
-                    <td><%= list[i].type %></td>
-                    <td><%= list[i].name %></td>
-                    <td><%= list[i].price %></td>
-                    <td><%= list[i].unit %></td>
-                    <td><button class="btn btn-primary btm-sm">加入购物车</button></td>
-                </tr>
+                <form method="post">
+                    <input type="hidden" name="name" value="<%= list[i].name %>"/>
+                    <tr>
+                        <td><%= list[i].type %></td>
+                        <td><%= list[i].name %></td>
+                        <td><%= list[i].price %></td>
+                        <td><%= list[i].unit %></td>
+                        <td><input type="submit" class="btn btn-primary btm-sm" value="加入购物车" /></td>
+                    </tr>
+                </form>
                 <% } %>
             </table>
         </div>

@@ -41,6 +41,7 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 
 app.get('/list', routes.list);
+app.post('/list', routes.add);
 
 app.get('/cart', routes.cart);
 

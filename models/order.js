@@ -3,11 +3,11 @@ function Order () {
 }
 
 Order.all = function () {
-    var boughtItems = JSON.parse(localStorage.getItem('boughtItems')) || {};
+//    var boughtItems = JSON.parse(localStorage.getItem('boughtItems')) || {};
     var result = {};
-    _(boughtItems).each(function (item, barcode) {
-        result[barcode] = new Item(item.barcode, item.name, item.unit, item.price, item.type, item.count, item.promotion);
-    });
+//    _(boughtItems).each(function (item, barcode) {
+//        result[barcode] = new Item(item.barcode, item.name, item.unit, item.price, item.type, item.count, item.promotion);
+//    });
     return result;
 };
 
@@ -51,3 +51,5 @@ Order.savePrice = function () {
         return sum + item.save();
     }, 0);
 };
+
+module.exports = Order;

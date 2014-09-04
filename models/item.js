@@ -1,3 +1,6 @@
+var Order = require('./order');
+var _ = require('lodash');
+
 function Item(barcode, name, unit, price, type, count, promotion) {
     this.barcode = barcode;
     this.name = name;
@@ -7,6 +10,10 @@ function Item(barcode, name, unit, price, type, count, promotion) {
     this.count = count || 0;
     this.promotion = promotion || false;
 }
+
+Item.findByName = function (name) {
+    return _(Order.all()).find({name: name});
+};
 
 Item.prototype.storage = function () {
     var boughtItems = JSON.parse(localStorage.getItem('boughtItems')) || {};
