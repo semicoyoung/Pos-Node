@@ -6,10 +6,11 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "express": "3.16.8",
+    "connect-mongo": "*",
     "ejs": "*",
-    "mongodb": "*",
-    "connect-mongo": "*"
+    "express": "3.16.8",
+    "jquery": "^2.1.1",
+    "mongodb": "*"
   },
   "devDependencies": {
     "supervisor": "^0.6.0"

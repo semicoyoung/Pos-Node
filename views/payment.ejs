@@ -1,0 +1,82 @@
+<% include header.ejs %>
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <a class="navbar-brand" href="..">Let's Go</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="..">主页</a></li>
+                <li><a href="list">商品列表</a></li>
+
+            </ul>
+            <ul class="nav navbar-nav pull-right">
+                <li>
+                    <a href="cart">
+                        <span class="glyphicon glyphicon-shopping-cart"></span>购物车 (<span><%= cart.count %></span>)
+                    </a>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container text-center">
+
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <h4 class="side-space text-left">购物清单</h4>
+        </div>
+
+        <div class="panel-body">
+            <p id="dateTime" class="text-left"></p>
+            <table id="bought-table" class="table table-bordered">
+                <tr>
+                    <th>分类</th><th>名称</th><th>单价(元)</th><th>单位</th><th>数量</th><th>小计</th>
+                </tr>
+                <% for(var i=0; i<list.length; i++) {%>
+                <tr>
+                    <td><%= list[i].type %></td>
+                    <td><%= list[i].name %></td>
+                    <td><%= list[i].price %></td>
+                    <td><%= list[i].unit %></td>
+                    <td><%= list[i].count %></td>
+                    <td><%= list[i].sumDisplay() %></td>
+                </tr>
+                <% } %>
+            </table>
+        </div>
+
+        <div class="panel-heading">
+            <h4 class="side-space text-left">赠送商品</h4>
+        </div>
+
+        <div class="panel-body">
+            <table id="present-table" class="table table-bordered">
+                <tr>
+                    <th>分类</th><th>名称</th><th>数量</th>
+                </tr>
+                <% for(var i=0; i<list.length; i++) {%>
+                <tr>
+                    <td><%= list[i].type %></td>
+                    <td><%= list[i].name %></td>
+                    <td><%= list[i].free() %></td>
+                </tr>
+                <% } %>
+            </table>
+        </div>
+
+        <div class="side-space text-right">
+            <p>总计：<span><%= cart.totalPrice %></span></p>
+            <p>节省：<span><%= cart.savePrice %></span></p>
+            <a id="confirm" class="btn btn-primary vertical-space" >确认</a>
+        </div>
+    </div>
+
+</div>
+
+<% include footer.ejs %>
