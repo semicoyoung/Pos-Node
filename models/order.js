@@ -1,5 +1,6 @@
-function Order () {
+var _ = require('lodash');
 
+function Order () {
 }
 
 Order.all = function () {

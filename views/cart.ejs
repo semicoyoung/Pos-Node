@@ -16,7 +16,7 @@
             <ul class="nav navbar-nav pull-right">
                 <li class="active">
                     <a>
-                        <span class="glyphicon glyphicon-shopping-cart"></span>购物车 (<span><%= cart.count %></span>)
+                        <span class="glyphicon glyphicon-shopping-cart"></span>购物车 (<span><%= count %></span>)
                     </a>
                 </li>
             </ul>
@@ -37,28 +37,28 @@
                 <tr>
                     <th>分类</th><th>名称</th><th>单价(元)</th><th>单位</th><th>数量</th><th>小计</th>
                 </tr>
-                <% for(var i=0; i<list.length; i++) {%>
+                <% for(var i=0; i<items.length; i++) {%>
                 <tr>
-                    <td><%= list[i].type %></td>
-                    <td><%= list[i].name %></td>
-                    <td><%= list[i].price %></td>
-                    <td><%= list[i].unit %></td>
+                    <td><%= items[i].type %></td>
+                    <td><%= items[i].name %></td>
+                    <td><%= items[i].price %></td>
+                    <td><%= items[i].unit %></td>
                     <td>
                         <div class="btn-group">
                             <button class="btn btn-default">-</button>
-                            <button class="btn btn-default item-count" disabled="disabled"><%= list[i].count %></button>
+                            <button class="btn btn-default item-count" disabled="disabled"><%= items[i].count %></button>
                             <button class="btn btn-default">+</button>
                         </div>
                     </td>
-                    <td><%= list[i].sumDisplay() %></td>
+                    <td><%= items[i].sumDisplay() %></td>
                 </tr>
                 <% } %>
             </table>
         </div>
 
         <div class="side-space text-right">
-            <p>总计：<span><%= cart.totalPrice.toFixed(2) + '元' %></span></p>
-            <p>节省：<span><%= cart.savePrice.toFixed(2) + '元' %></span></p>
+            <p>总计：<span><%= totalPrice.toFixed(2) + '元' %></span></p>
+            <p>节省：<span><%= savePrice.toFixed(2) + '元' %></span></p>
             <a class="btn btn-primary vertical-space" href="payment">付款</a>
         </div>
     </div>
