@@ -1,24 +1,12 @@
 var _ = require('lodash');
 var fixtures = require('./fixtures');
+var mongodb = require('./db');
 
 function Order () {
 }
 
-Order.all = function () {
-
-    var boughtItems = {};
-    var result = {};
-    _(boughtItems).each(function (item, barcode) {
-        result[barcode] = new Item(item.barcode, item.name, item.unit, item.price, item.type, item.count, item.promotion);
-    });
-
-    return result;
-};
-
 Order.getCount = function () {
-    return _(Order.all()).reduce(function (sum, item) {
-        return sum + item.count;
-    }, 0);
+    return 0;
 };
 
 Order.clear = function () {
@@ -26,8 +14,36 @@ Order.clear = function () {
 };
 
 Order.addItem = function (name) {
-    var item = _(Order.all()).find({name: name}) || _(fixtures.loadAllItems()).find({name: name});
-    item.addCount();
+    mongodb.open(function (err, db) {
+        if (err) {
+            return callback(err);//错误，返回 err 信息
+        }
+        //读取 items 集合
+        db.collection('items', function (err, collection) {
+            if (err) {
+                mongodb.close();
+                return callback(err);//错误，返回 err 信息
+            }
+            //将用户数据插入 users 集合
+            collection.findOne({name: name}, function (err, result) {
+                if (!result) {
+                    collection.insert(_(fixtures.loadAllItems()).find({name: name}), {
+                        safe: true
+                    }, function (err) {
+                        mongodb.close();
+                    });
+                    mongodb.close();
+                    return;
+                }
+                result.count++;
+                collection.update({name: name}, result, {
+                    safe: true
+                }, function (err) {
+                    mongodb.close();
+                });
+            });
+        });
+    });
 };
 
 Order.getPromotion = function () {

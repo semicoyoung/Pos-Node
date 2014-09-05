@@ -8,13 +8,9 @@ function Item(barcode, name, unit, price, type, count, promotion) {
     this.unit = unit;
     this.price = price;
     this.type = type;
-    this.count = count || 0;
+    this.count = count || 1;
     this.promotion = promotion || false;
 }
-
-Item.findByName = function (name) {
-    return _(Order.all()).find({name: name});
-};
 
 Item.prototype.storage = function () {
     var item = this;
@@ -30,8 +26,8 @@ Item.prototype.storage = function () {
                 return callback(err);//错误，返回 err 信息
             }
             //将用户数据插入 users 集合
-            collection.findOne({barcode: item.barcode}, function (err, the_item) {
-                if (!the_item) {
+            collection.findOne({barcode: item.barcode}, function (err, result) {
+                if (!result) {
                     collection.insert(item, {
                         safe: true
                     }, function (err) {
