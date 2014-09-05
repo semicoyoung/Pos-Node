@@ -3,7 +3,6 @@
  * GET home page.
  */
 var fixtures = require('../models/fixtures');
-var Item = require('../models/item');
 var Order = require('../models/order');
 
 exports.index = function(req, res){
@@ -41,7 +40,6 @@ exports.payment = function(req, res){
 
 exports.add = function(req, res){
     var name = req.body.name;
-    var item = Item.findByName(name);
-    //item.addCount();
+    Order.addItem(name);
     res.redirect('/list');
 };

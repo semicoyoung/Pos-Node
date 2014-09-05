@@ -5,6 +5,7 @@ function Order () {
 }
 
 Order.all = function () {
+
     var boughtItems = {};
     var result = {};
     _(boughtItems).each(function (item, barcode) {
@@ -15,7 +16,6 @@ Order.all = function () {
 };
 
 Order.getCount = function () {
-    console.log(fixtures.loadAllItems());
     return _(Order.all()).reduce(function (sum, item) {
         return sum + item.count;
     }, 0);
@@ -25,8 +25,8 @@ Order.clear = function () {
     localStorage.boughtItems = JSON.stringify({});
 };
 
-Order.addItem = function (barcode) {
-    var item = Order.all()[barcode] || _(loadAllItems()).find({barcode: barcode});
+Order.addItem = function (name) {
+    var item = _(Order.all()).find({name: name}) || _(fixtures.loadAllItems()).find({name: name});
     item.addCount();
 };
 

@@ -1,5 +1,6 @@
 var Order = require('./order');
 var _ = require('lodash');
+var mongodb = require('./db');
 
 function Item(barcode, name, unit, price, type, count, promotion) {
     this.barcode = barcode;
@@ -16,9 +17,37 @@ Item.findByName = function (name) {
 };
 
 Item.prototype.storage = function () {
-    var boughtItems = JSON.parse(localStorage.getItem('boughtItems')) || {};
-    boughtItems[this.barcode] = this;
-    localStorage.boughtItems = JSON.stringify(boughtItems);
+    var item = this;
+
+    mongodb.open(function (err, db) {
+        if (err) {
+            return callback(err);//错误，返回 err 信息
+        }
+        //读取 items 集合
+        db.collection('items', function (err, collection) {
+            if (err) {
+                mongodb.close();
+                return callback(err);//错误，返回 err 信息
+            }
+            //将用户数据插入 users 集合
+            collection.findOne({barcode: item.barcode}, function (err, the_item) {
+                if (!the_item) {
+                    collection.insert(item, {
+                        safe: true
+                    }, function (err) {
+                        mongodb.close();
+                    });
+                    mongodb.close();
+                    return;//失败！返回 err 信息
+                }
+                collection.update({barcode: item.barcode}, item, {
+                    safe: true
+                }, function (err) {
+                    mongodb.close();
+                });
+            });
+        });
+    });
 };
 
 Item.prototype.getPromotion = function () {
