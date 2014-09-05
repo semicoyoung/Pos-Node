@@ -1,18 +1,21 @@
 var _ = require('lodash');
+var fixtures = require('./fixtures');
 
 function Order () {
 }
 
 Order.all = function () {
-//    var boughtItems = JSON.parse(localStorage.getItem('boughtItems')) || {};
+    var boughtItems = {};
     var result = {};
-//    _(boughtItems).each(function (item, barcode) {
-//        result[barcode] = new Item(item.barcode, item.name, item.unit, item.price, item.type, item.count, item.promotion);
-//    });
+    _(boughtItems).each(function (item, barcode) {
+        result[barcode] = new Item(item.barcode, item.name, item.unit, item.price, item.type, item.count, item.promotion);
+    });
+
     return result;
 };
 
 Order.getCount = function () {
+    console.log(fixtures.loadAllItems());
     return _(Order.all()).reduce(function (sum, item) {
         return sum + item.count;
     }, 0);

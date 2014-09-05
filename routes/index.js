@@ -16,7 +16,7 @@ exports.index = function(req, res){
 exports.list = function(req, res){
     res.render('list', {
         title: '商品列表',
-        list: fixtures.items(),
+        list: fixtures.loadAllItems(),
         count: Order.getCount()
     });
 };
@@ -25,7 +25,7 @@ exports.cart = function(req, res){
     res.render('cart', {
         title: '购物车',
         count: Order.getCount(),
-        items: Order.all(),
+        items: Order.all(fixtures.loadAllItems()),
         totalPrice: Order.totalPrice(),
         savePrice: Order.savePrice()
     })
