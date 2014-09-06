@@ -38,22 +38,29 @@
                     <th>分类</th><th>名称</th><th>单价(元)</th><th>单位</th><th>数量</th><th>小计</th>
                 </tr>
                 <% for(var i=0; i<items.length; i++) {%>
-                <form method="post">
-                    <tr>
-                        <td><%= items[i].type %></td>
-                        <td><%= items[i].name %></td>
-                        <td><%= items[i].price %></td>
-                        <td><%= items[i].unit %></td>
-                        <td>
-                            <div class="btn-group">
+                <tr>
+                    <td><%= items[i].type %></td>
+                    <td><%= items[i].name %></td>
+                    <td><%= items[i].price %></td>
+                    <td><%= items[i].unit %></td>
+                    <td>
+                        <div class="btn-group">
+
+                            <form method="post">
+                                <input type="hidden" name="name" value="<%= items[i].name %>"/>
+                                <input type="hidden" name="operation" value="minus"/>
                                 <input type="submit" class="btn btn-default" value="-"/>
-                                <button class="btn btn-default item-count" disabled="disabled"><%= items[i].count %></button>
+                            </form>
+                            <button class="btn btn-default item-count" disabled="disabled"><%= items[i].count %></button>
+                            <form method="post">
+                                <input type="hidden" name="name" value="<%= items[i].name %>"/>
+                                <input type="hidden" name="operation" value="add"/>
                                 <input type="submit" class="btn btn-default" value="+"/>
-                            </div>
-                        </td>
-                        <td><%= items[i].sumDisplay() %></td>
-                    </tr>
-                </form>
+                            </form>
+                        </div>
+                    </td>
+                    <td><%= items[i].sumDisplay() %></td>
+                </tr>
                 <% } %>
             </table>
         </div>

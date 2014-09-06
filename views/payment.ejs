@@ -16,7 +16,7 @@
             <ul class="nav navbar-nav pull-right">
                 <li>
                     <a href="cart">
-                        <span class="glyphicon glyphicon-shopping-cart"></span>购物车 (<span><%= cart.count %></span>)
+                        <span class="glyphicon glyphicon-shopping-cart"></span>购物车 (<span><%= count %></span>)
                     </a>
                 </li>
             </ul>
@@ -38,14 +38,14 @@
                 <tr>
                     <th>分类</th><th>名称</th><th>单价(元)</th><th>单位</th><th>数量</th><th>小计</th>
                 </tr>
-                <% for(var i=0; i<list.length; i++) {%>
+                <% for(var i=0; i < bought_list.length; i++) {%>
                 <tr>
-                    <td><%= list[i].type %></td>
-                    <td><%= list[i].name %></td>
-                    <td><%= list[i].price %></td>
-                    <td><%= list[i].unit %></td>
-                    <td><%= list[i].count %></td>
-                    <td><%= list[i].sumDisplay() %></td>
+                    <td><%= bought_list[i].type %></td>
+                    <td><%= bought_list[i].name %></td>
+                    <td><%= bought_list[i].price %></td>
+                    <td><%= bought_list[i].unit %></td>
+                    <td><%= bought_list[i].count %></td>
+                    <td><%= bought_list[i].sumDisplay() %></td>
                 </tr>
                 <% } %>
             </table>
@@ -60,19 +60,19 @@
                 <tr>
                     <th>分类</th><th>名称</th><th>数量</th>
                 </tr>
-                <% for(var i=0; i<list.length; i++) {%>
+                <% for(var i=0; i < free_list.length; i++) {%>
                 <tr>
-                    <td><%= list[i].type %></td>
-                    <td><%= list[i].name %></td>
-                    <td><%= list[i].free() %></td>
+                    <td><%= free_list[i].type %></td>
+                    <td><%= free_list[i].name %></td>
+                    <td><%= free_list[i].free() %></td>
                 </tr>
                 <% } %>
             </table>
         </div>
 
         <div class="side-space text-right">
-            <p>总计：<span><%= cart.totalPrice %></span></p>
-            <p>节省：<span><%= cart.savePrice %></span></p>
+            <p>总计：<span><%= total %></span></p>
+            <p>节省：<span><%= saving %></span></p>
             <a id="confirm" class="btn btn-primary vertical-space" >确认</a>
         </div>
     </div>

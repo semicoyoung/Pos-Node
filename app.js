@@ -44,6 +44,7 @@ app.get('/list', routes.list);
 app.post('/list', routes.add);
 
 app.get('/cart', routes.cart);
+app.post('/cart', routes.alter);
 
 app.get('/payment', routes.payment);
 
