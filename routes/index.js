@@ -35,13 +35,19 @@ exports.list = function(req, res){
 };
 
 exports.cart = function(req, res){
-    res.render('cart', {
-        title: '购物车',
-        count: Order.getCartStats(),
-        items: {},
-        totalPrice: 0,
-        savePrice: 0
-    })
+    Order.all(function (err, list) {
+        if(err) {
+            req.flash('error', err);
+        }
+        var cartStats = Order.getCartStats(list);
+        res.render('cart', {
+            title: '购物车',
+            items: list,
+            count: cartStats.count,
+            total: cartStats.total,
+            saving: cartStats.saving
+        });
+    });
 };
 
 exports.payment = function(req, res){
@@ -61,6 +67,7 @@ exports.add = function(req, res){
         else {
             if(result) {
                 result.count++;
+                result.getPromotion(fixtures.loadPromotions());
                 result.store(function () {
                     res.redirect('/list');
                 });

@@ -1,4 +1,5 @@
 var mongodb = require('./db');
+var _ = require('lodash');
 
 function Item(barcode, name, unit, price, type, count, promotion) {
     this.barcode = barcode;
@@ -60,9 +61,12 @@ Item.prototype.join = function (callback) {
     });
 };
 
-Item.prototype.getPromotion = function () {
-    this.promotion = true;
-    this.store();
+Item.prototype.getPromotion = function (promotions) {
+    var self = this;
+    var list = _(promotions).findWhere({type: 'BUY_TWO_GET_ONE_FREE'}).barcodes;
+    if(_(list).contains(self.barcode)) {
+        this.promotion = true;
+    }
 };
 
 Item.prototype.addCount = function() {

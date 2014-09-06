@@ -24,3 +24,5 @@ var loadPromotions = function () {
 };
 
 exports.loadAllItems = loadAllItems;
+
+exports.loadPromotions = loadPromotions;

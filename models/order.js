@@ -60,16 +60,14 @@ Order.getCartStats = function (list) {
     var count = 0, total = 0, saving = 0;
     _(list).each(function (item) {
         count += item.count;
-        total += item.total();
+        total += item.fare();
         saving += item.saving();
     });
     return { count: count, total: total, saving: saving };
 };
 
 Order.getPromotion = function () {
-    var items = Order.all();
     var promotions = loadPromotions();
-    var two_with_one_list = _(promotions).findWhere({type: 'BUY_TWO_GET_ONE_FREE'}).barcodes;
     _(two_with_one_list).each(function (barcode) {
         var item = items[barcode];
         if(item && !item.promotion) {
