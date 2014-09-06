@@ -23,11 +23,14 @@ Item.prototype.store = function (callback) {
                 mongodb.close();
                 return callback(err);
             }
-            collection.update({name: self.name}, self, {
+            collection.update({barcode: self.barcode}, self, {
                 safe: true
             }, function (err) {
                 mongodb.close();
-                return callback(err);
+                if(err) {
+                    return callback(err);
+                }
+                callback();
             });
         });
     });
@@ -51,6 +54,7 @@ Item.prototype.join = function (callback) {
                 if(err) {
                     return callback(err);
                 }
+                callback();
             });
         });
     });

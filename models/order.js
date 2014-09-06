@@ -20,15 +20,14 @@ Order.all = function (callback) {
                 if(err) {
                     return callback(err);
                 }
-                callback(null, result);
+                var list = _(result).map(function (stat) {
+                    return new Item(stat.barcode, stat.name, stat.unit, stat.price, stat.type, stat.count, stat.promotion);
+                }).value();
+                callback(null, list);
                 mongodb.close();
             });
         });
     });
-};
-
-Order.clear = function () {
-
 };
 
 Order.getItem = function (name, callback) {
@@ -41,21 +40,25 @@ Order.getItem = function (name, callback) {
                 mongodb.close();
                 return callback(err);
             }
-            collection.findOne({name: name}, function (err, result) {
+            collection.findOne({name: name}, function (err, stat) {
                 mongodb.close();
                 if(err) {
                     return callback(err);
                 }
-                callback(null, result);
+                var item = !stat? stat: new Item(stat.barcode, stat.name, stat.unit, stat.price, stat.type, stat.count, stat.promotion);
+                callback(null, item);
             });
         });
     });
 };
 
+Order.clear = function () {
+
+};
+
 Order.getCartStats = function (list) {
     var count = 0, total = 0, saving = 0;
-    _(list).each(function (stat) {
-        var item = new Item(stat.barcode, stat.name, stat.unit, stat.price, stat.type, stat.count, stat.promotion);
+    _(list).each(function (item) {
         count += item.count;
         total += item.total();
         saving += item.saving();

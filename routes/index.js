@@ -4,6 +4,7 @@
  */
 var fixtures = require('../models/fixtures');
 var Order = require('../models/order');
+var _ = require('lodash');
 
 exports.index = function(req, res){
     Order.all(function (err, list) {
@@ -19,6 +20,7 @@ exports.index = function(req, res){
 };
 
 exports.list = function(req, res){
+    var items = fixtures.loadAllItems();
     Order.all(function (err, list) {
         if(err) {
             req.flash('error', err);
@@ -26,7 +28,7 @@ exports.list = function(req, res){
         var cartStats = Order.getCartStats(list);
         res.render('list', {
             title: '商品列表',
-            list: list,
+            list: items,
             count: cartStats.count
         });
     });
@@ -59,14 +61,17 @@ exports.add = function(req, res){
         else {
             if(result) {
                 result.count++;
-                result.store();
+                result.store(function () {
+                    res.redirect('/list');
+                });
             }
             else {
                 result = _(fixtures.loadAllItems()).find({name: name});
                 result.count++;
-                result.join();
+                result.join(function () {
+                    res.redirect('/list');
+                });
             }
         }
-        res.redirect('/list');
     });
 };
