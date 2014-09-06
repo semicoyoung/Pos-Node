@@ -6,9 +6,14 @@ var fixtures = require('../models/fixtures');
 var Order = require('../models/order');
 
 exports.index = function(req, res){
-    res.render('index', {
-        title: '主页',
-        count: Order.getCount()
+    Order.getCount(function (err, count) {
+        if(err) {
+            req.flash('error', err);
+        }
+        res.render('index', {
+            title: '主页',
+            count: count
+        });
     });
 };
 
@@ -24,9 +29,9 @@ exports.cart = function(req, res){
     res.render('cart', {
         title: '购物车',
         count: Order.getCount(),
-        items: Order.all(fixtures.loadAllItems()),
-        totalPrice: Order.totalPrice(),
-        savePrice: Order.savePrice()
+        items: {},
+        totalPrice: 0,
+        savePrice: 0
     })
 };
 
@@ -40,6 +45,21 @@ exports.payment = function(req, res){
 
 exports.add = function(req, res){
     var name = req.body.name;
-    Order.addItem(name);
-    res.redirect('/list');
+    Order.getItem(name, function (err, result) {
+        if(err) {
+            req.flash('error', err);
+        }
+        else {
+            if(result) {
+                result.count++;
+                result.store();
+            }
+            else {
+                result = _(fixtures.loadAllItems()).find({name: name});
+                result.count++;
+                result.join();
+            }
+        }
+        res.redirect('/list');
+    });
 };

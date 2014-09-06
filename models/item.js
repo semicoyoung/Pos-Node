@@ -8,39 +8,49 @@ function Item(barcode, name, unit, price, type, count, promotion) {
     this.unit = unit;
     this.price = price;
     this.type = type;
-    this.count = count || 1;
+    this.count = count || 0;
     this.promotion = promotion || false;
 }
 
-Item.prototype.storage = function () {
-    var item = this;
-
+Item.prototype.store = function (callback) {
+    var self = this;
     mongodb.open(function (err, db) {
         if (err) {
-            return callback(err);//错误，返回 err 信息
+            return callback(err);
         }
-        //读取 items 集合
         db.collection('items', function (err, collection) {
             if (err) {
                 mongodb.close();
-                return callback(err);//错误，返回 err 信息
+                return callback(err);
             }
-            //将用户数据插入 users 集合
-            collection.findOne({barcode: item.barcode}, function (err, result) {
-                if (!result) {
-                    collection.insert(item, {
-                        safe: true
-                    }, function (err) {
-                        mongodb.close();
-                    });
-                    mongodb.close();
-                    return;//失败！返回 err 信息
+            collection.update({name: self.name}, self, {
+                safe: true
+            }, function (err) {
+                mongodb.close();
+                return callback(err);
+            });
+        });
+    });
+};
+
+Item.prototype.join = function (callback) {
+    var self = this;
+    mongodb.open(function (err, db) {
+        if (err) {
+            return callback(err);
+        }
+        db.collection('items', function (err, collection) {
+            if (err) {
+                mongodb.close();
+                return callback(err);
+            }
+            collection.insert(self, {
+                safe: true
+            }, function (err) {
+                mongodb.close();
+                if(err) {
+                    return callback(err);
                 }
-                collection.update({barcode: item.barcode}, item, {
-                    safe: true
-                }, function (err) {
-                    mongodb.close();
-                });
             });
         });
     });
@@ -48,12 +58,12 @@ Item.prototype.storage = function () {
 
 Item.prototype.getPromotion = function () {
     this.promotion = true;
-    this.storage();
+    this.store();
 };
 
 Item.prototype.addCount = function() {
     this.count++;
-    this.storage();
+    this.store();
 };
 
 Item.prototype.minusCount = function () {
@@ -61,7 +71,7 @@ Item.prototype.minusCount = function () {
         return;
     }
     this.count--;
-    this.storage();
+    this.store();
 };
 
 Item.prototype.sumDisplay = function () {
@@ -81,7 +91,7 @@ Item.prototype.fare = function () {
     return (this.count - this.free()) * this.price;
 };
 
-Item.prototype.save = function () {
+Item.prototype.saving = function () {
     return this.free() * this.price;
 };
 
