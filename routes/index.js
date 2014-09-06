@@ -6,22 +6,29 @@ var fixtures = require('../models/fixtures');
 var Order = require('../models/order');
 
 exports.index = function(req, res){
-    Order.getCartStats(function (err, count) {
+    Order.all(function (err, list) {
         if(err) {
             req.flash('error', err);
         }
+        var cartStats = Order.getCartStats(list);
         res.render('index', {
             title: '主页',
-            count: count
+            count: cartStats.count
         });
     });
 };
 
 exports.list = function(req, res){
-    res.render('list', {
-        title: '商品列表',
-        list: fixtures.loadAllItems(),
-        count: Order.getCartStats()
+    Order.all(function (err, list) {
+        if(err) {
+            req.flash('error', err);
+        }
+        var cartStats = Order.getCartStats(list);
+        res.render('list', {
+            title: '商品列表',
+            list: list,
+            count: cartStats.count
+        });
     });
 };
 

@@ -5,7 +5,7 @@ var Item = require('./item');
 function Order () {
 }
 
-Order.getCartStats = function (callback) {
+Order.all = function (callback) {
     mongodb.open(function (err, db) {
         if (err) {
             return callback(err);
@@ -20,24 +20,12 @@ Order.getCartStats = function (callback) {
                 if(err) {
                     return callback(err);
                 }
-                if(!result) {
-                    return callback(null, 0);
-                }
-                var count = 0, total = 0, saving = 0;
-                _(result).each(function (stat) {
-
-                    var item = new Item(stat.barcode, stat.name, stat.unit, stat.price, stat.type, stat.count, stat.promotion);
-                    count += item.count;
-                    total += item.total();
-                    saving += item.saving();
-                });
-                callback(null, count, total, saving);
+                callback(null, result);
                 mongodb.close();
             });
         });
     });
 };
-
 
 Order.clear = function () {
 
@@ -62,6 +50,17 @@ Order.getItem = function (name, callback) {
             });
         });
     });
+};
+
+Order.getCartStats = function (list) {
+    var count = 0, total = 0, saving = 0;
+    _(list).each(function (stat) {
+        var item = new Item(stat.barcode, stat.name, stat.unit, stat.price, stat.type, stat.count, stat.promotion);
+        count += item.count;
+        total += item.total();
+        saving += item.saving();
+    });
+    return { count: count, total: total, saving: saving };
 };
 
 Order.getPromotion = function () {
