@@ -71,9 +71,12 @@
         </div>
 
         <div class="side-space text-right">
-            <p>总计：<span><%= total %></span></p>
-            <p>节省：<span><%= saving %></span></p>
-            <a id="confirm" class="btn btn-primary vertical-space" >确认</a>
+            <p>总计：<span><%= total.toFixed(2) + '元' %></span></p>
+            <p>节省：<span><%= saving.toFixed(2) + '元' %></span></p>
+            <form method="post">
+                <input type="submit" class="btn btn-primary vertical-space" value="付款"/>
+            </form>
+
         </div>
     </div>
 

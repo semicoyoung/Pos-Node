@@ -20,7 +20,6 @@ exports.index = function(req, res){
 };
 
 exports.list = function(req, res){
-    var items = fixtures.loadAllItems();
     Order.all(function (err, list) {
         if(err) {
             req.flash('error', err);
@@ -28,7 +27,7 @@ exports.list = function(req, res){
         var cartStats = Order.getCartStats(list);
         res.render('list', {
             title: '商品列表',
-            list: items,
+            list: fixtures.loadAllItems(),
             count: cartStats.count
         });
     });
@@ -43,6 +42,9 @@ exports.cart = function(req, res){
         var items = _(list).filter(function (record) {
             return record.count > 0;
         }).value();
+        if(cartStats.count <= 0) {
+            return res.redirect('/list');
+        }
         res.render('cart', {
             title: '购物车',
             items: items,
@@ -54,11 +56,29 @@ exports.cart = function(req, res){
 };
 
 exports.payment = function(req, res){
-    res.render('payment', {
-        title: '付款页',
-        list: [],
-        cart: {count: 0, totalPrice: 9, savePrice: 3}
-    })
+    Order.all(function (err, list) {
+        if(err) {
+            req.flash('error', err);
+        }
+        var cartStats = Order.getCartStats(list);
+        var items = _(list).filter(function (record) {
+            return record.count > 0;
+        }).value();
+        var free_items = _(items).filter(function (record) {
+            return record.promotion && record.free() > 0;
+        }).value();
+        if(cartStats.count <= 0) {
+            return res.redirect('/list');
+        }
+        res.render('payment', {
+            title: '付款页',
+            bought_list: items,
+            free_list: free_items,
+            count: cartStats.count,
+            total: cartStats.total,
+            saving: cartStats.saving
+        });
+    });
 };
 
 exports.add = function(req, res){
@@ -68,9 +88,9 @@ exports.add = function(req, res){
             req.flash('error', err);
         }
         else {
+
             if(result) {
                 result.count++;
-                result.getPromotion(fixtures.loadPromotions());
                 result.store(function () {
                     res.redirect(req.url);
                 });
@@ -78,6 +98,7 @@ exports.add = function(req, res){
             else {
                 result = _(fixtures.loadAllItems()).find({name: name});
                 result.count++;
+                result.getPromotion(fixtures.loadPromotions());
                 result.join(function () {
                     res.redirect(req.url);
                 });
@@ -108,6 +129,18 @@ exports.alter = function (req, res){
                     res.redirect(req.url);
                 });
             }
+        }
+    });
+};
+
+exports.clear = function (req, res){
+    Order.clear(function (err) {
+        if(err) {
+            req.flash('error', err);
+        }
+        else {
+            Order.clear();
+            res.redirect('/list');
         }
     });
 };

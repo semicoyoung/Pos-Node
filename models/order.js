@@ -52,8 +52,25 @@ Order.getItem = function (name, callback) {
     });
 };
 
-Order.clear = function () {
-
+Order.clear = function (callback) {
+    mongodb.open(function (err, db) {
+        if (err) {
+            return callback(err);
+        }
+        db.collection('items', function (err, collection) {
+            if (err) {
+                mongodb.close();
+                return callback(err);
+            }
+            collection.remove({}, function (err) {
+                mongodb.close();
+                if(err) {
+                    return callback(err);
+                }
+                callback(null);
+            });
+        });
+    });
 };
 
 Order.getCartStats = function (list) {
