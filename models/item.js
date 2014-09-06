@@ -1,5 +1,3 @@
-var Order = require('./order');
-var _ = require('lodash');
 var mongodb = require('./db');
 
 function Item(barcode, name, unit, price, type, count, promotion) {
@@ -11,6 +9,8 @@ function Item(barcode, name, unit, price, type, count, promotion) {
     this.count = count || 0;
     this.promotion = promotion || false;
 }
+
+module.exports = Item;
 
 Item.prototype.store = function (callback) {
     var self = this;
@@ -95,4 +95,3 @@ Item.prototype.saving = function () {
     return this.free() * this.price;
 };
 
-module.exports = Item;

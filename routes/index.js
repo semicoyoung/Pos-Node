@@ -6,7 +6,7 @@ var fixtures = require('../models/fixtures');
 var Order = require('../models/order');
 
 exports.index = function(req, res){
-    Order.getCount(function (err, count) {
+    Order.getCartStats(function (err, count) {
         if(err) {
             req.flash('error', err);
         }
@@ -21,14 +21,14 @@ exports.list = function(req, res){
     res.render('list', {
         title: '商品列表',
         list: fixtures.loadAllItems(),
-        count: Order.getCount()
+        count: Order.getCartStats()
     });
 };
 
 exports.cart = function(req, res){
     res.render('cart', {
         title: '购物车',
-        count: Order.getCount(),
+        count: Order.getCartStats(),
         items: {},
         totalPrice: 0,
         savePrice: 0

@@ -1,10 +1,11 @@
 var _ = require('lodash');
 var mongodb = require('./db');
+var Item = require('./item');
 
 function Order () {
 }
 
-Order.getCount = function (callback) {
+Order.getCartStats = function (callback) {
     mongodb.open(function (err, db) {
         if (err) {
             return callback(err);
@@ -22,10 +23,15 @@ Order.getCount = function (callback) {
                 if(!result) {
                     return callback(null, 0);
                 }
-                var count = _(result).reduce(function (sum, item) {
-                    return sum + item.count;
-                }, 0);
-                callback(null, count);
+                var count = 0, total = 0, saving = 0;
+                _(result).each(function (stat) {
+
+                    var item = new Item(stat.barcode, stat.name, stat.unit, stat.price, stat.type, stat.count, stat.promotion);
+                    count += item.count;
+                    total += item.total();
+                    saving += item.saving();
+                });
+                callback(null, count, total, saving);
                 mongodb.close();
             });
         });
@@ -69,19 +75,5 @@ Order.getPromotion = function () {
         }
     }, this);
 };
-
-//Order.totalPrice = function () {
-//    var items = Order.all();
-//    return _(items).reduce(function (sum, item) {
-//        return sum + item.total();
-//    }, 0);
-//};
-//
-//Order.savePrice = function () {
-//    var items = Order.all();
-//    return _(items).reduce(function (sum, item) {
-//        return sum + item.saving();
-//    }, 0);
-//};
 
 module.exports = Order;
